@@ -1,41 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="be">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="пра.бел — беларускі культурна-асветніцкі праект">
-  <title>памылка / пра.бел</title>
-  <link rel="icon" type="image/png" href="images/favicon.png?v=layout-5">
-  <link rel="stylesheet" href="styles.css?v=layout-6">
-  <link
-  rel="apple-touch-icon"
-  sizes="180x180"
-  href="images/apple-touch-icon.png">
+  <title>сайт часова недаступны / пра.бел</title>
 
-  <meta name="apple-mobile-web-app-title" content="пра.бел">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="config.js?v=layout-5" defer></script>
-  <script src="app.js?v=layout-5" defer></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: #f7f5ef;
+      color: #242424;
+      font-family: Arial, sans-serif;
+    }
+
+    main {
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .brand {
+      margin: 0 0 40px;
+      font-size: 20px;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: clamp(28px, 6vw, 44px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .description {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #606060;
+    }
+  </style>
 </head>
-<body data-page="404">
-  <aside class="sidebar">
-    <a href="index.html" class="brand" aria-label="пра.бел — галоўная"><img src="images/logo.svg" alt="пра.бел"></a>
-    <div class="caption">беларускі<br>культурна-<br>асветніцкі<br>праект</div>
-    <nav class="nav" aria-label="навігацыя">
-      <a href="index.html" data-nav="home" aria-label="галоўная"><img src="images/nav-home.png" alt="галоўная"></a>
-      <a href="poems.html" data-nav="poems" aria-label="вершы"><img src="images/nav-poems.png" alt="вершы"></a>
-      <a href="translations.html" data-nav="translations" aria-label="пераклады"><img src="images/nav-translations.png" alt="пераклады"></a>
-      <a href="culture.html" data-nav="culture" aria-label="культура"><img src="images/nav-culture.png" alt="культура"></a>
-      <a href="authors.html" data-nav="authors" aria-label="аўтары"><img src="images/nav-authors.png" alt="аўтары"></a>
-      <a href="https://t.me/pra_bel_bot" target="_blank" rel="noopener noreferrer" aria-label="дадаць свае"><img src="images/nav-propose.svg" alt="прапанаваць свае"></a>
-    </nav>
-    <div class="corner-bottom">менш шуму.<br>больш сэнсу.</div>
-  </aside>
-  <main class="main">
-    <header class="page-header"><h1 id="page-title">памылка</h1><span class="corner-top">словы, якія<br>застаюцца</span></header>
-    <div class="content">
-      <section class="error-page"><div><h2>404</h2><h3>Мой родны кут, як ты змяніўся…</h3><p>А дакладней — гэты кут проста знік ці перанёсся ў іншае месца. Бывае, што блукаеш між соснаў, шукаючы патрэбны радок, а трапляеш на пустую паляну.</p><a href="index.html">на галоўную →</a></div></section>
-    </div>
+
+<body>
+  <main>
+    <p class="brand">пра.бел</p>
+    <h1>сайт часова недаступны</h1>
+    <p class="description">
+      дадаём новыя функцыі.<br>
+      хутка вернемся.
+    </p>
   </main>
 </body>
 </html>
