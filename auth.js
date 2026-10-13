@@ -76,11 +76,10 @@
       const wrap = document.createElement('div');
       wrap.className = 'auth-tg-wrap';
 
-      const view = document.createElement('div');
+      const view = document.createElement('img');
       view.className = 'auth-tg-view';
-      view.innerHTML =
-        '<img src="images/tg-login.svg" alt="" aria-hidden="true">' +
-        '<span>увайсці</span>';
+      view.src = 'images/tg-login.svg';
+      view.alt = 'увайсці праз Telegram';
       wrap.append(view);
 
       const s = document.createElement('script');
@@ -99,19 +98,22 @@
     }
     const hello = document.createElement('div');
     hello.className = 'auth-hello';
-    hello.textContent = 'вы: ' + (u.display_name || 'без імя');
+    hello.textContent = u.display_name || '';
+
     const out = document.createElement('button');
     out.type = 'button';
     out.className = 'auth-logout';
-    out.innerHTML =
-      '<img src="images/logout.svg" alt="" aria-hidden="true">' +
-      '<span>выйсці</span>';
+    const img = document.createElement('img');
+    img.src = 'images/logout.svg';
+    img.alt = 'выйсці';
+    out.append(img);
     out.addEventListener('click', async () => {
       await window.PRA_AUTH.logout();
       cached = undefined;
       fill(block);
       if (document.body.dataset.page === 'post') location.reload();
     });
+
     block.append(hello, out);
   }
 
