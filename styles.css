@@ -1328,3 +1328,8 @@ body.leaving main {
     display: none;
   }
 }
+
+.auth-block{margin-top:14px;display:flex;flex-direction:column;gap:6px;font-size:.85rem}
+.auth-hello{opacity:.75}
+.auth-logout{background:transparent;border:1px solid currentColor;padding:6px 10px;border-radius:8px;cursor:pointer;font:inherit;color:inherit;opacity:.75}
+.auth-logout:hover{opacity:1}

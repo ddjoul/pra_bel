@@ -865,16 +865,38 @@
       status.textContent = 'адпраўляем…';
 
       try {
-        const {error}=await db.from('comments').insert({
-          post_id:postId, display_name, body:text,
-          status:'pending', status_id:1,
-        });
-
-        if (error) throw error;
-
+        let published = false;
+        const A = window.PRA_AUTH;
+        if (A && A.getToken()) {
+          try {
+            await A.api('/api/comments', {
+              method: 'POST',
+              body: { post_id: postId, display_name, body: text },
+            });
+            published = true;
+          } catch (e) {
+            if (e.status !== 401) throw e;
+            A.setToken(null);
+          }
+        }
+        if (!published) {
+          const { error } = await db.from('comments').insert({
+            post_id: postId, display_name, body: text,
+            status: 'pending', status_id: 1,
+          });
+          if (error) throw error;
+        }
         form.reset();
-        status.textContent =
-          'дзякуй! каментарый адпраўлены на мадэрацыю.';
+        status.textContent = published
+          ? 'дзякуй! каментарый апублікаваны.'
+          : 'дзякуй! каментарый адпраўлены на мадэрацыю.';
+      } catch (e) {
+        console.error('каментарый:', e);
+        status.textContent = 'не ўдалося адправіць. паспрабуй пазней.';
+      } finally {
+        submit.disabled = false;
+      }
+      
       } catch (e) {
         console.error('каментарый:', e);
         status.textContent =
