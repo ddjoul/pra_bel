@@ -1242,6 +1242,22 @@ body.leaving main {
   }
 
   /* кнопки меню идут друг под другом */
+    .auth-block{
+    grid-column: 1 / -1;
+    align-items: flex-end;
+    padding: 0;
+    margin: 18px 0 0;
+    gap: 18px;
+  }
+
+  .auth-hello{
+    font-size: 12px;
+    line-height: 1.05;
+    text-align: right;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  
   .nav {
     grid-column: 1 / -1;
     display: flex;
@@ -1415,3 +1431,37 @@ body.leaving main {
   height: 24px;
   max-width: none;
 }
+
+.auth-block a,
+.auth-logout {
+  position: relative;
+  display: block;
+  width: fit-content;
+  height: 24px;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.auth-block a::after,
+.auth-logout::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 3px);
+  height: 3px;
+  background: var(--black);
+  opacity: 0;
+  transform: scaleX(.65);
+  transform-origin: right;
+  transition: opacity .15s, transform .15s;
+}
+
+.auth-block a:hover::after,
+.auth-block a:focus-visible::after,
+.auth-logout:hover::after,
+.auth-logout:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+

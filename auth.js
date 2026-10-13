@@ -100,13 +100,15 @@
     hello.className = 'auth-hello';
     hello.textContent = u.display_name || '';
 
-    const out = document.createElement('button');
-    out.type = 'button';
+    const out = document.createElement('a');
     out.className = 'auth-logout';
+    out.href = '#';
+    out.setAttribute('role', 'button');
     const img = document.createElement('img');
     img.src = 'images/logout.svg';
     img.alt = 'выйсці';
     out.append(img);
+    out.addEventListener('click', e => e.preventDefault());
     out.addEventListener('click', async () => {
       await window.PRA_AUTH.logout();
       cached = undefined;
