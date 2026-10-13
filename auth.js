@@ -73,6 +73,16 @@
     const u = await me();
     block.replaceChildren();
     if (!u) {
+      const wrap = document.createElement('div');
+      wrap.className = 'auth-tg-wrap';
+
+      const view = document.createElement('div');
+      view.className = 'auth-tg-view';
+      view.innerHTML =
+        '<img src="images/tg-login.svg" alt="" aria-hidden="true">' +
+        '<span>увайсці</span>';
+      wrap.append(view);
+
       const s = document.createElement('script');
       s.async = true;
       s.src = 'https://telegram.org/js/telegram-widget.js?22';
@@ -82,7 +92,9 @@
       s.setAttribute('data-radius', '8');
       s.setAttribute('data-request-access', 'write');
       s.setAttribute('data-auth-url', API_BASE + '/api/tg/callback');
-      block.append(s);
+      wrap.append(s);
+
+      block.append(wrap);
       return;
     }
     const hello = document.createElement('div');
@@ -91,7 +103,9 @@
     const out = document.createElement('button');
     out.type = 'button';
     out.className = 'auth-logout';
-    out.textContent = 'выйсці';
+    out.innerHTML =
+      '<img src="images/logout.svg" alt="" aria-hidden="true">' +
+      '<span>выйсці</span>';
     out.addEventListener('click', async () => {
       await window.PRA_AUTH.logout();
       cached = undefined;

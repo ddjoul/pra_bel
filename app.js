@@ -1004,7 +1004,7 @@
         if (onSuccess) setTimeout(onSuccess, 600);
       } catch (err) {
         console.error('каментарый:', err);
-        status.textContent = 'не ўдалося адправіць. паспрабуй пазней.';
+        status.textContent = 'часова, адпраўляюць толька зарэгістраваныя карыстальнікі';
       } finally {
         submit.disabled = false;
       }
