@@ -865,10 +865,9 @@
       status.textContent = 'адпраўляем…';
 
       try {
-        const { error } = await db.from('comments').insert({
-          post_id: postId,
-          display_name,
-          body: text
+        const {error}=await db.from('comments').insert({
+          post_id:postId, display_name, body:text,
+          status:'pending', status_id:1,
         });
 
         if (error) throw error;
