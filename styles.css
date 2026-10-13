@@ -1349,29 +1349,69 @@ body.leaving main {
 .comment-child{opacity:.9}
 .comment-child .comment-head{font-size:.9rem}
 
-.auth-tg-wrap{position:relative;display:inline-block;width:100%}
-.auth-tg-view{
-  display:block;
-  width:100%;
-  height:auto;
-  cursor:pointer;
-}
-.auth-tg-wrap iframe{
-  position:absolute!important;inset:0!important;
-  width:100%!important;height:100%!important;
-  opacity:0!important;cursor:pointer;z-index:2;
+/* ── кнопка «увайсці» — как .nav img ── */
+.auth-block {
+  margin-top: 28px;
+  padding-right: calc((var(--rail) - 114px)/2);
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 28px;
+  font-size: 14px;
 }
 
-.auth-logout{
-  background:transparent;
-  border:none;
-  padding:0;
-  cursor:pointer;
-  display:block;
-  line-height:0;
+.auth-hello {
+  font-size: 12px;
+  line-height: 1.05;
+  color: var(--gray);
+  text-align: right;
+  overflow-wrap: anywhere;
 }
-.auth-logout img{
-  display:block;
-  width:100%;
-  height:auto;
+
+.auth-tg-wrap {
+  position: relative;
+  display: block;
+  height: 24px;
+  width: fit-content;
+  line-height: 0;
+}
+
+.auth-tg-view {
+  display: block;
+  width: auto;
+  height: 24px;
+  max-width: none;
+  cursor: pointer;
+}
+
+.auth-tg-wrap iframe {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0 !important;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* ── кнопка «выйсці» — как .nav img ── */
+.auth-logout {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  height: 24px;
+  width: fit-content;
+  line-height: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.auth-logout img {
+  display: block;
+  width: auto;
+  height: 24px;
+  max-width: none;
 }
