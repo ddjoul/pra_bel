@@ -1241,15 +1241,6 @@ body.leaving main {
     --right: 20px;
   }
 
-  /* кнопки меню идут друг под другом */
-    .auth-block{
-    grid-column: 1 / -1;
-    align-items: flex-end;
-    padding: 0;
-    margin: 18px 0 0;
-    gap: 18px;
-  }
-
   .auth-hello{
     font-size: 12px;
     line-height: 1.05;
@@ -1344,12 +1335,6 @@ body.leaving main {
     display: none;
   }
 }
-
-.auth-block{margin-top:14px;display:flex;flex-direction:column;gap:6px;font-size:.85rem}
-.auth-hello{opacity:.75}
-.auth-logout{background:transparent;border:1px solid currentColor;padding:6px 10px;border-radius:8px;cursor:pointer;font:inherit;color:inherit;opacity:.75}
-.auth-logout:hover{opacity:1}
-
 .comment-reply-btn{
   background:transparent;border:none;padding:4px 0;cursor:pointer;
   font:inherit;color:inherit;opacity:.55;font-size:.85rem;
@@ -1364,73 +1349,6 @@ body.leaving main {
 }
 .comment-child{opacity:.9}
 .comment-child .comment-head{font-size:.9rem}
-
-/* ── кнопка «увайсці» — как .nav img ── */
-.auth-block {
-  margin-top: 28px;
-  padding-right: calc((var(--rail) - 114px)/2);
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 28px;
-  font-size: 14px;
-}
-
-.auth-hello {
-  font-size: 12px;
-  line-height: 1.05;
-  color: var(--gray);
-  text-align: right;
-  overflow-wrap: anywhere;
-}
-
-.auth-tg-wrap {
-  position: relative;
-  display: block;
-  height: 24px;
-  width: fit-content;
-  line-height: 0;
-}
-
-.auth-tg-view {
-  display: block;
-  width: auto;
-  height: 24px;
-  max-width: none;
-  cursor: pointer;
-}
-
-.auth-tg-wrap iframe {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  opacity: 0 !important;
-  cursor: pointer;
-  z-index: 2;
-}
-
-/* ── кнопка «выйсці» — как .nav img ── */
-.auth-logout {
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: block;
-  height: 24px;
-  width: fit-content;
-  line-height: 0;
-  font: inherit;
-  color: inherit;
-}
-
-.auth-logout img {
-  display: block;
-  width: auto;
-  height: 24px;
-  max-width: none;
-}
 
 .auth-block a,
 .auth-logout {
@@ -1465,3 +1383,114 @@ body.leaving main {
   transform: scaleX(1);
 }
 
+/* ── кнопки входа / выхода в сайдбаре ── */
+.auth-block {
+  margin: 28px 0 0;
+  padding: 0 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 28px;
+  font-size: 14px;
+}
+
+.auth-hello {
+  font-size: 12px;
+  line-height: 1.05;
+  color: var(--gray);
+  text-align: right;
+  overflow-wrap: anywhere;
+  opacity: 1;
+}
+
+.auth-tg-wrap {
+  position: relative;
+  display: block;
+  height: 24px;
+  width: fit-content;
+  line-height: 0;
+}
+
+.auth-tg-view {
+  position: relative;
+  display: block;
+  width: auto;
+  height: 24px;
+  line-height: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-tg-view img {
+  display: block;
+  width: auto;
+  height: 24px;
+  max-width: none;
+}
+
+.auth-tg-wrap iframe {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0 !important;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.auth-logout {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  height: 24px;
+  width: fit-content;
+  line-height: 0;
+  font: inherit;
+  color: inherit;
+  opacity: 1;
+  text-decoration: none;
+}
+
+.auth-logout img {
+  display: block;
+  width: auto;
+  height: 24px;
+  max-width: none;
+}
+
+.auth-tg-view::after,
+.auth-logout::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 3px);
+  height: 3px;
+  background: var(--black);
+  opacity: 0;
+  transform: scaleX(.65);
+  transform-origin: right;
+  transition: opacity .15s, transform .15s;
+}
+
+.auth-tg-view:hover::after,
+.auth-tg-view:focus-visible::after,
+.auth-logout:hover::after,
+.auth-logout:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* мобильная версия блока авторизации */
+@media (max-width: 640px) {
+  .auth-block {
+    grid-column: 1 / -1;
+    align-items: flex-end;
+    padding: 0;
+    margin: 18px 0 0;
+    gap: 18px;
+  }
+}
