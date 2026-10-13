@@ -1333,3 +1333,18 @@ body.leaving main {
 .auth-hello{opacity:.75}
 .auth-logout{background:transparent;border:1px solid currentColor;padding:6px 10px;border-radius:8px;cursor:pointer;font:inherit;color:inherit;opacity:.75}
 .auth-logout:hover{opacity:1}
+
+.comment-reply-btn{
+  background:transparent;border:none;padding:4px 0;cursor:pointer;
+  font:inherit;color:inherit;opacity:.55;font-size:.85rem;
+}
+.comment-reply-btn:hover{opacity:1;text-decoration:underline}
+.comment-reply-form{margin-top:10px;padding-left:14px;border-left:2px solid rgba(0,0,0,.08)}
+.comment-form-reply textarea{min-height:60px}
+.comment-children{
+  margin-top:12px;padding-left:16px;
+  border-left:2px solid rgba(0,0,0,.12);
+  display:flex;flex-direction:column;gap:10px;
+}
+.comment-child{opacity:.9}
+.comment-child .comment-head{font-size:.9rem}

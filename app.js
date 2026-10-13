@@ -799,11 +799,111 @@
     }
   }
 
-  async function comments(side, postId) {
+    async function comments(side, postId) {
     const section = el('section', 'comments');
     const head = el('h2', '', 'каментарыі: …');
-    const form = el('form', 'comment-form');
     const list = el('div', 'comment-list');
+    section.append(head, list);
+
+    // ── форма верхнего уровня ──
+    const form = buildCommentForm(postId, null);
+    section.append(form.el);
+
+    side.append(section);
+
+    // ── рендер списка ──
+    function renderList(rows) {
+      list.replaceChildren();
+      const roots = rows.filter(c => !c.parent_id);
+      const byParent = new Map();
+      for (const c of rows) {
+        if (!c.parent_id) continue;
+        if (!byParent.has(c.parent_id)) byParent.set(c.parent_id, []);
+        byParent.get(c.parent_id).push(c);
+      }
+
+      if (!roots.length) {
+        list.append(el('p', 'form-note', 'пакуль няма апублікаваных каментарыяў.'));
+        head.textContent = 'каментарыі: 0';
+        return;
+      }
+
+      head.textContent = 'каментарыі: ' + rows.length;
+
+      for (const c of roots) {
+        list.append(commentNode(c, byParent.get(c.id) || []));
+      }
+    }
+
+    function commentNode(c, replies) {
+      const item = el('article', 'comment');
+
+      const h = el('div', 'comment-head');
+      h.append(el('span', '', c.display_name), dateNode(c.created_at));
+      item.append(h, el('p', '', c.body));
+
+      // кнопка «адказаць» — только у корневых
+      const replyBtn = el('button', 'btn btn-ghost comment-reply-btn', 'адказаць');
+      replyBtn.type = 'button';
+      item.append(replyBtn);
+
+      const replyWrap = el('div', 'comment-reply-form');
+      replyWrap.hidden = true;
+      item.append(replyWrap);
+
+      replyBtn.addEventListener('click', () => {
+        if (!replyWrap.hidden) {
+          replyWrap.hidden = true;
+          replyWrap.replaceChildren();
+          return;
+        }
+        replyWrap.hidden = false;
+        const inner = buildCommentForm(postId, c.id, () => {
+          replyWrap.hidden = true;
+          replyWrap.replaceChildren();
+        });
+        replyWrap.replaceChildren(inner.el);
+        inner.focus();
+      });
+
+      if (replies.length) {
+        const sub = el('div', 'comment-children');
+        for (const r of replies) {
+          const node = el('article', 'comment comment-child');
+          const rh = el('div', 'comment-head');
+          rh.append(el('span', '', r.display_name), dateNode(r.created_at));
+          node.append(rh, el('p', '', r.body));
+          sub.append(node);
+        }
+        item.append(sub);
+      }
+
+      return item;
+    }
+
+    // ── загрузка и первый рендер ──
+    try {
+      const rows = await all(() =>
+        db.from('comments')
+          .select('id,parent_id,display_name,body,created_at')
+          .eq('post_id', postId)
+          .eq('status', 'published')
+          .order('created_at')
+          .order('id')
+      );
+      renderList(rows);
+    } catch (e) {
+      console.error('каментарыі:', e);
+      head.textContent = 'каментарыі';
+      list.append(el('p', 'form-note', 'не ўдалося загрузіць каментарыі.'));
+    }
+  }
+
+  // Универсальная форма: parent_id=null — корень, parent_id=<uuid> — ответ.
+  // onSuccess вызывается после успешной отправки (для ответов — чтобы закрыть форму).
+  function buildCommentForm(postId, parentId, onSuccess) {
+    const form = el('form', 'comment-form');
+    if (parentId) form.classList.add('comment-form-reply');
 
     const name = el('input');
     name.name = 'display_name';
@@ -815,7 +915,7 @@
 
     const body = el('textarea');
     body.name = 'body';
-    body.placeholder = 'каментарый_';
+    body.placeholder = parentId ? 'адказ_' : 'каментарый_';
     body.setAttribute('aria-label', 'каментарый');
     body.required = true;
     body.maxLength = 2000;
@@ -826,31 +926,31 @@
     trap.tabIndex = -1;
     trap.autocomplete = 'off';
 
-    const submit = el('button', 'btn', 'адправіць');
+    const submit = el('button', 'btn', parentId ? 'адказаць' : 'адправіць');
     submit.type = 'submit';
 
     const status = el('p', 'status');
     status.setAttribute('role', 'status');
 
     form.append(
-      name,
-      body,
-      trap,
-      submit,
-      el(
-        'p',
-        'form-note',
-        'каментарый з’явіцца пасля мадэрацыі. імя не правяраецца.'
-      ),
+      name, body, trap, submit,
+      el('p', 'form-note',
+        parentId
+          ? 'адказ з’явіцца пасля мадэрацыі.'
+          : 'каментарый з’явіцца пасля мадэрацыі. імя не правяраецца.'),
       status
     );
 
-    section.append(head, form, list);
-    side.append(section);
+    // Предзаполнить ник, если авторизован
+    (async () => {
+      const A = window.PRA_AUTH;
+      if (!A) return;
+      const u = await A.me().catch(() => null);
+      if (u && u.display_name && !name.value) name.value = u.display_name;
+    })();
 
     form.addEventListener('submit', async e => {
       e.preventDefault();
-
       if (trap.value) return;
 
       const display_name = name.value.trim();
@@ -871,7 +971,12 @@
           try {
             await A.api('/api/comments', {
               method: 'POST',
-              body: { post_id: postId, display_name, body: text },
+              body: {
+                post_id: postId,
+                parent_id: parentId,
+                display_name,
+                body: text,
+              },
             });
             published = true;
           } catch (e) {
@@ -880,66 +985,35 @@
           }
         }
         if (!published) {
-          const { error } = await db.from('comments').insert({
-            post_id: postId, display_name, body: text,
-            status: 'pending', status_id: 1,
-          });
+          const payload = {
+            post_id: postId,
+            display_name,
+            body: text,
+            status: 'pending',
+            status_id: 1,
+          };
+          if (parentId) payload.parent_id = parentId;
+          const { error } = await db.from('comments').insert(payload);
           if (error) throw error;
         }
+
         form.reset();
         status.textContent = published
           ? 'дзякуй! каментарый апублікаваны.'
           : 'дзякуй! каментарый адпраўлены на мадэрацыю.';
-      } catch (e) {
-        console.error('каментарый:', e);
+        if (onSuccess) setTimeout(onSuccess, 600);
+      } catch (err) {
+        console.error('каментарый:', err);
         status.textContent = 'не ўдалося адправіць. паспрабуй пазней.';
       } finally {
         submit.disabled = false;
       }
     });
 
-    try {
-      const rows = await all(() =>
-        db.from('comments')
-          .select('id,display_name,body,created_at')
-          .eq('post_id', postId)
-          .eq('status', 'published')
-          .order('created_at')
-          .order('id')
-      );
-
-      head.textContent = 'каментарыі: ' + rows.length;
-
-      if (!rows.length) {
-        list.append(
-          el(
-            'p',
-            'form-note',
-            'пакуль няма апублікаваных каментарыяў.'
-          )
-        );
-      }
-
-      rows.forEach(c => {
-        const item = el('article', 'comment');
-        const h = el('div', 'comment-head');
-
-        h.append(
-          el('span', '', c.display_name),
-          dateNode(c.created_at)
-        );
-
-        item.append(h, el('p', '', c.body));
-        list.append(item);
-      });
-    } catch (e) {
-      console.error('каментарыі:', e);
-      head.textContent = 'каментарыі';
-
-      list.append(
-        el('p', 'form-note', 'не ўдалося загрузіць каментарыі.')
-      );
-    }
+    return {
+      el: form,
+      focus: () => body.focus(),
+    };
   }
 
   (async () => {
