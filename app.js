@@ -896,14 +896,6 @@
       } finally {
         submit.disabled = false;
       }
-      
-      } catch (e) {
-        console.error('каментарый:', e);
-        status.textContent =
-          'не ўдалося адправіць. паспрабуй пазней.';
-      } finally {
-        submit.disabled = false;
-      }
     });
 
     try {
@@ -964,13 +956,3 @@
     }
   })();
 })();
-
-/* Используем SVG-кнопки на всех страницах. */
-document.querySelectorAll('.nav img').forEach(img => {
-  const url = new URL(img.src);
-
-  if (url.pathname.endsWith('.png')) {
-    url.pathname = url.pathname.replace(/\.png$/, '.svg');
-    img.src = url.href;
-  }
-});
