@@ -11,7 +11,10 @@ const css=document.createElement('style');css.textContent=`
 html[data-theme=dark]{color-scheme:dark;--white:#000000;--black:#FFFFFF;--gray:#9F9F9F;--line:#262626}
 html[data-theme=dark] .brand img,html[data-theme=dark] .nav img,html[data-theme=dark] .auth-logout img{filter:invert(1)}
 html[data-theme=dark] .auth-tg-view{filter:none!important}
-html[data-theme=dark] .card{--bg:#262626;--ink:#FFFFFF;--muted:#9F9F9F;--border:#262626}
+html[data-theme=dark] .card{--bg:#000000;--ink:#FFFFFF;--muted:#9F9F9F;--border:#262626}
+html[data-theme=dark] .card:nth-child(3n+2){--bg:#FFFFFF;--ink:#000000;--muted:#262626;--border:#FFFFFF}
+html[data-theme=dark] .card:nth-child(3n){--bg:#262626;--ink:#FFFFFF;--muted:#9F9F9F;--border:#262626}
+.rating-stars button:has(~ button[aria-pressed=true]){background:var(--black);color:var(--white)}
 html[data-theme=dark] .comment-children,html[data-theme=dark] .comment-reply-form{border-left-color:#262626}
 .pra-ui-controls{display:flex;gap:10px;flex-wrap:wrap;margin:22px 20px 0 32px}
 .pra-ui-controls button{background:var(--white);color:var(--black);border:1px solid var(--line);padding:10px;min-height:44px;font-size:12px}
